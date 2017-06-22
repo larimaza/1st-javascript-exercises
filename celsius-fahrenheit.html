@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+		body {
+			font-family: 'Arial', sans-serif;
+		}
+		.container {
+			width: 358px;
+		    height: 219px;
+		    margin: auto;
+		    position: absolute;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		}
+		.title {
+			margin: 0 0 20px;
+			font-size: 24px;
+			color: black;
+		}
+		.title-is-celsius_to_fahrenheit {
+		    font-size: 12px;
+		    color: black;
+		    background: #43c0e0;
+		    padding: 8px 0 8px 25px;
+    		margin: 0;
+    		border-radius: 3px 3px 0 0;
+		}
+		.box {
+			border: 1px solid #c1c1c1;
+		    border-top: 0;
+		    border-radius: 0 0 3px 3px;
+		    height: 140px;
+		}
+		.celsius-label {
+			margin-left: 23px;
+    		font-size: 12px;
+		}
+		#celsius-input {
+			margin-top: 27px;
+    		height: 10px;
+    		width: 127px;
+		}
+		#btn-convert {
+			font-size: 10px;
+			padding: 1px 4px 0 4px;
+		}
+		.result-label {
+			margin-left: 23px;
+    		font-size: 12px;
+    		margin-top: 21px;
+		}
+		.btn-switch {
+			margin-left: 23px;
+			font-size: 10px;
+			padding: 1px 4px 0 4px;
+			margin-top: 10px;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="title">Celsius - Fahrenheit Converter</h1>
+			<h2 class="title-is-celsius_to_fahrenheit">Converting Celcius to Fahrenheit</h2>
+			<div class="box">
+				<label class="celsius-label">Celcius:
+					<input id="celsius-input">
+				</label>
+				<button id="btn-convert">Convert!</button>
+				<p class="result-label">Fahrenheit: <span id="result"> </span></p>
+				<button class="btn-switch">Fahrenheit to Celcius</button>
+			</div>
+		</div>
+		<script>
+			var inputCelsius = document.querySelector("#celsius-input");
+			function celsiusToFahrenheit(){
+				document.querySelector("#result").innerHTML = (parseFloat(inputCelsius.value) * 1.8) + 32;
+			}
+			var convertBtn = document.querySelector("#btn-convert");
+			convertBtn.onclick = celsiusToFahrenheit;
+		</script>
+	</body>
+</html>
