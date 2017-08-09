@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="UTF-8">
+		<style>
+
+			body {
+				font-family: 'Arial', sans-serif;
+			}
+			.container {
+				width: 358px;
+			    height: 219px;
+			    margin: auto;
+			    position: absolute;
+			    top: 0;
+			    bottom: 0;
+			    left: 0;
+			    right: 0;
+			}
+			.title {
+				margin: 0 0 20px;
+				font-size: 24px;
+				color: black;
+			}
+			.subtitle {
+			    font-size: 12px;
+			    color: black;
+			    padding: 8px 0 8px 25px;
+	    		margin: 0;
+	    		border-radius: 3px 3px 0 0;
+	    		background: #43c0e0;
+			}
+			.box {
+				border: 1px solid #c1c1c1;
+			    border-top: 0;
+			    border-radius: 0 0 3px 3px;
+			    height: 140px;
+			}
+			.input-label {
+				margin-left: 23px;
+	    		font-size: 12px;
+			}
+			.input-field {
+				margin-top: 27px;
+	    		height: 10px;
+	    		width: 127px;
+			}
+			.btn-convert {
+				font-size: 10px;
+				padding: 1px 4px 0 4px;
+			}
+			.result-wrapper {
+				display: flex;
+			}
+			.result-label {
+				margin-left: 23px;
+	    		font-size: 12px;
+	    		margin-top: 21px;
+			}
+			.converted-result {
+				font-size: 12px;
+				margin-top: 21px;
+				margin-left: 3px;
+			}
+			.btn-switch {
+				margin-left: 23px;
+				font-size: 10px;
+				padding: 1px 4px 0 4px;
+				margin-top: 10px;
+			}
+
+		</style>
+		<title>Celsius - Fahrenheit Converter</title>
+
+	</head>
+
+	<body>
+
+		<div class="container">
+			<h1 class="title">Celsius - Fahrenheit Converter</h1>
+			<h2 class="subtitle">Converting Celsius to Fahrenheit</h2>
+			<div class="box">
+				<label class="input-label">
+					<span class="input-label-text">Celsius:</span>
+					<input class="input-field">
+				</label>
+				<button class="btn-convert">Convert!</button>
+				<div class="result-wrapper">
+					<p class="result-label">Fahrenheit: </p>
+					<p class="converted-result"></p>
+				</div>
+				<button class="btn-switch">Fahrenheit to Celsius</button>
+			</div>
+		</div>
+
+		<script>
+
+			//////////////////////////////////////////////////////////
+			// Module's DOM elements
+			//////////////////////////////////////////////////////////
+
+			var converterTitle = document.querySelector(".subtitle");
+			var inputLabel = document.querySelector(".input-label-text");
+			var inputField = document.querySelector(".input-field");
+			var convertBtn = document.querySelector(".btn-convert");
+			var resultLabel = document.querySelector(".result-label");
+			var convertedResult = document.querySelector(".converted-result");
+			var switchBtn = document.querySelector(".btn-switch");
+
+			//////////////////////////////////////////////////////////
+			// Helper variables
+			//////////////////////////////////////////////////////////
+
+			var converterState = "isCelsiusToFahrenheit";	
+
+			//////////////////////////////////////////////////////////
+			// Event binds
+			//////////////////////////////////////////////////////////	
+
+			convertBtn.onclick = convertValue;
+			switchBtn.onclick = switchConverter;
+
+			//////////////////////////////////////////////////////////
+			// Helper functions
+			//////////////////////////////////////////////////////////	
+
+			function validateStringAsNumber(isThisValid){
+				return ! (isNaN(isThisValid.value) || isThisValid.value == "");
+			}
+
+			//////////////////////////////////////////////////////////
+			// Event handlers
+			//////////////////////////////////////////////////////////
+
+			function convertValue(){
+				if(validateStringAsNumber(inputField) == false){
+					alert("Please insert a number");
+					inputField.value = "";
+					convertedResult.innerHTML = "";
+				} else{
+					switch(converterState){
+						case "isCelsiusToFahrenheit":
+							convertedResult.innerHTML = ((parseFloat(inputField.value) * 1.8) + 32).toFixed(1);
+							break;
+						case "isFahrenheitToCelsius":
+							convertedResult.innerHTML = ((parseFloat(inputField.value) - 32) / 1.8).toFixed(1);
+							break;
+					}
+				}
+			}
+			
+			function switchConverter(){
+				switch(converterState){
+					case "isCelsiusToFahrenheit":
+						converterTitle.innerHTML = "Converting Fahrenheit to Celsius";
+						converterTitle.style.backgroundColor = "#43c0e0";
+						inputLabel.innerHTML = "Fahrenheit:";
+						resultLabel.innerHTML = "Celsius:";
+						switchBtn.innerHTML = "Celsius to Fahrenheit";
+						inputField.value = "";
+						convertedResult.innerHTML = "";
+						converterState = "isFahrenheitToCelsius";
+						break;
+					case "isFahrenheitToCelsius":
+						converterTitle.innerHTML = "Converting Celsius to Fahrenheit";
+						converterTitle.style.backgroundColor = "#dd6e84";
+						inputLabel.innerHTML = "Celsius:";
+						resultLabel.innerHTML = "Fahrenheit:";
+						switchBtn.innerHTML = "Fahrenheit to Celsius";
+						inputField.value = "";
+						convertedResult.innerHTML = "";
+						converterState = "isCelsiusToFahrenheit";
+						break;
+				}	
+				return converterState;
+			}
+
+		</script>
+	</body>
+</html>
