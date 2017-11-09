@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="UTF-8">
+		<style>
+
+			body {
+				font-family: 'Arial', sans-serif;
+			}
+			.container {
+				width: 358px;
+			    height: 249px;
+			    margin: auto;
+			    position: absolute;
+			    top: 0;
+			    bottom: 0;
+			    left: 0;
+			    right: 0;
+			}
+			.title {
+				margin: 0 0 20px;
+				font-size: 19px;
+				color: black;
+			}
+			.select-wrapper {
+				margin-bottom: 25px;
+				text-align: center;
+			}
+			.select-label {
+				font-size: 12px;
+			}
+			.input-scale-select, .output-scale-select {
+				font-size: 12px;
+			}
+			.subtitle {
+			    font-size: 12px;
+			    color: black;
+			    padding: 8px 0 8px 25px;
+	    		margin: 0;
+	    		border-radius: 3px 3px 0 0;
+	    		background: #43c0e0;
+			}
+			.box {
+				border: 1px solid #c1c1c1;
+			    border-top: 0;
+			    border-radius: 0 0 3px 3px;
+			    height: 107px;
+			}
+			.input-label {
+				margin-left: 23px;
+	    		font-size: 12px;
+			}
+			.input-field {
+				margin-top: 27px;
+	    		height: 10px;
+	    		width: 127px;
+			}
+			.btn-convert {
+				font-size: 10px;
+				padding: 1px 4px 0 4px;
+			}
+			.output-wrapper {
+				display: flex;
+			}
+			.output-label {
+				margin-left: 23px;
+	    		font-size: 12px;
+	    		margin-top: 21px;
+			}
+			.output-converted {
+				font-size: 12px;
+				margin-top: 21px;
+				margin-left: 3px;
+			}
+
+		</style>
+		<title>Celsius - Fahrenheit - Kelvin Converter</title>
+
+	</head>
+
+	<body>
+
+		<div class="container">
+			<h1 class="title">Celsius - Fahrenheit - Kelvin Converter</h1>
+			<div class="select-wrapper">
+				<p class="select-label">Select two scales:</p>
+				<select class="input-scale-select">
+					<option value="celsius" selected>From Celsius</option>
+					<option value="fahrenheit">From Fahrenheit</option>
+					<option value="kelvin">From Kelvin</option>
+				</select>
+				<select class="output-scale-select">
+					<option value="celsius">To Celsius</option>
+					<option value="fahrenheit" selected>To Fahrenheit</option>
+					<option value="kelvin">To Kelvin</option>
+				</select>
+			</div>
+			<h2 class="subtitle">Converting from 
+				<span class="subtitle-input">Celsius</span> to 
+				<span class="subtitle-output">Fahrenheit</span>
+			</h2>
+			<div class="box">
+				<label class="input-label">
+					<span class="input-label-text">Celsius:</span>
+					<input class="input-field">
+				</label>
+				<button class="btn-convert">Convert!</button>
+				<div class="output-wrapper">
+					<p class="output-label">Fahrenheit: </p>
+					<p class="output-converted"></p>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			//////////////////////////////////////////////////////////
+			// Module's DOM elements
+			//////////////////////////////////////////////////////////
+
+			var inputSelect = document.querySelector(".input-scale-select");
+			var outputSelect = document.querySelector(".output-scale-select");
+			var subtitleBar = document.querySelector(".subtitle");
+			var inputSubtitle = document.querySelector(".subtitle-input");
+			var outputSubtitle = document.querySelector(".subtitle-output");
+			var inputLabel = document.querySelector(".input-label-text");
+			var inputField = document.querySelector(".input-field");
+			var convertBtn = document.querySelector(".btn-convert");
+			var outputLabel = document.querySelector(".output-label");
+			var outputConverted = document.querySelector(".output-converted");
+
+			//////////////////////////////////////////////////////////
+			// Temperature scales
+			//////////////////////////////////////////////////////////
+
+			var temperatureScales = {
+				"celsius": {
+					name: "Celsius",
+					formulae: {
+						fahrenheit: function(tempCelsius) { 
+							return (((parseFloat(tempCelsius) * 1.8) + 32).toFixed(1));
+						},
+						kelvin: function(tempCelsius) {
+							return ((parseFloat(tempCelsius) + 273.15).toFixed(1));
+						}
+					},
+					bgColor: "#dd6e84"
+				},
+				"fahrenheit": {
+					name: "Fahrenheit",
+					formulae: {
+						celsius: function(tempFahrenheit) {
+							return (((parseFloat(tempFahrenheit) - 32) / 1.8).toFixed(1));
+						},
+						kelvin: function(tempFahrenheit) {
+							return ((((parseFloat(tempFahrenheit) - 32) / 1.8) + 273.15).toFixed(1));
+						}
+					},
+					bgColor: "#43c0e0"
+				},
+				"kelvin": {
+					name: "Kelvin",
+					formulae: {
+						celsius: function(tempKelvin) {
+							return ((parseFloat(tempKelvin) - 273.15).toFixed(1));
+						},
+						fahrenheit: function(tempKelvin) {
+							return ((((parseFloat(tempKelvin) - 273.15) * 1.8) + 32).toFixed(1));
+						}
+					},
+					bgColor: "#bb75e3"
+				}
+			}
+
+			//////////////////////////////////////////////////////////
+			// Event binds
+			//////////////////////////////////////////////////////////	
+
+			convertBtn.onclick = convertValue;
+
+			inputSelect.addEventListener("change", function(evt) {
+				inputSetup(evt.target.value);
+			}, false);
+
+			outputSelect.addEventListener("change", function(evt) {
+				outputSetup(inputSelect.value, evt.target.value);
+			}, false);
+
+			//////////////////////////////////////////////////////////
+			// Helper functions
+			//////////////////////////////////////////////////////////	
+
+			function validateStringAsNumber(isThisValid) {
+				return ! (isNaN(isThisValid.value) || isThisValid.value == "");
+			}
+
+			//////////////////////////////////////////////////////////
+			// Event handlers
+			//////////////////////////////////////////////////////////
+
+			function inputSetup(selectedInputScale) {
+				subtitleBar.style.backgroundColor = temperatureScales[selectedInputScale].bgColor;
+				inputSubtitle.innerHTML = temperatureScales[selectedInputScale].name;
+				inputLabel.innerHTML = temperatureScales[selectedInputScale].name + ":";
+				inputField.value = "";
+				outputConverted.innerHTML = "";
+			}
+
+			function outputSetup(currentInputScale, selectedOutputScale) {
+				outputSubtitle.innerHTML = temperatureScales[selectedOutputScale].name;
+				outputLabel.innerHTML = temperatureScales[selectedOutputScale].name + ":";
+				convertFormula = temperatureScales[currentInputScale].formulae[selectedOutputScale];
+				inputField.value = "";
+				outputConverted.innerHTML = "";
+			}
+
+			function convertValue() {
+				if(validateStringAsNumber(inputField) == false) {
+					alert("Please insert a number");
+					inputField.value = "";
+					outputConverted.innerHTML = "";
+				} else if(inputSelect.value == outputSelect.value) {
+					outputConverted.innerHTML = inputField.value;
+				} else {
+					outputConverted.innerHTML = convertFormula(inputField.value);
+				}
+			}
+
+		</script>
+	</body>
+</html>
